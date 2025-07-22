@@ -90,7 +90,7 @@ jobs:
       working-directory: ./terraform
     
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file=variables.tf
+      run: terraform apply -auto-approve -var-file=variables.tfvars
       working-directory: ./terraform
     
     - name: Update kubeconfig for EKS
