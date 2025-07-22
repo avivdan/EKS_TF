@@ -23,6 +23,7 @@ jobs:
     - name: Build and push to dockerhub
       uses: docker/build-push-action@v5
       with:
-       context: .
-       push: true
-       tags: avivdani/flask-demo:latest
+        context: ./flask-demo-app
+        file: ./flask-demo-app/Dockerfile
+        push: true
+        tags: avivdani/flask-demo:latest
