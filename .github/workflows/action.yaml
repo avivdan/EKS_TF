@@ -67,34 +67,25 @@ jobs:
       run: |
         aws s3api head-bucket --bucket terraform-state-eks-cluster-1 2>/dev/null || \
         aws s3api create-bucket --bucket terraform-state-eks-cluster-1 --region eu-north-1 --create-bucket-configuration LocationConstraint=eu-north-1
-    - name: terraform init
-      uses: hashicorp/terraform-action@v4
-      with:
-        command: init
-        arguments: -backend-config="bucket=terraform-state-eks-cluster-1" -backend-config="key=eks-cluster/terraform.tfstate" -backend-config="region=eu-north-1"
-        working-directory: ./terraform
-    - name: terraform plan
-      uses: hashicorp/terraform-action@v4
-      with:
-        command: plan
-        arguments: -var-file=variables.tf
-        working-directory: ./terraform
-    - name: terraform apply
-      uses: hashicorp/terraform-action@v4
-      with:
-        command: apply
-        arguments: -var-file=variables.tf
-        working-directory: ./terraform
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+    - name: Terraform Init
+      run: terraform init -backend-config="bucket=terraform-state-eks-cluster-1" -backend-config="key=eks-cluster/terraform.tfstate" -backend-config="region=eu-north-1"
+      working-directory: ./terraform
+    - name: Terraform Plan
+      run: terraform plan -var-file=variables.tf
+      working-directory: ./terraform
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var-file=variables.tf
+      working-directory: ./terraform
     - name: Update kubeconfig for EKS
       run: |
         aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name eks-cluster
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
     - name: Deploy to Kubernetes
-      uses: helm/helm-action@v3
-      with:
-        action: upgrade
-        name: flask-demo
-        chart: ./flask-demo
-        install: true
+      run: helm upgrade --install flask-demo ./flask-demo
     - name: Show Helm release status
       run: helm status flask-demo
     - name: Show Terraform outputs
