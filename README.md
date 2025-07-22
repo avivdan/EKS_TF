@@ -43,8 +43,7 @@ aws ecr describe-images --repository-name <repository> --region <region>
 
 ### update context kubectl
 ```
-aws eks --region eu-north-1 update-kubeconfig --name eks
--cluster
+aws eks --region eu-north-1 update-kubeconfig --name eks-cluster
 
 kubectl apply -f flask-deployment.yaml
 
