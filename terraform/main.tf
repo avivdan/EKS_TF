@@ -37,7 +37,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 
 # public node group
 resource "aws_eks_node_group" "public" {
-  cluster_name    = "eks-cluster"
+  cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "public-node-group"
   subnet_ids      = [aws_subnet.eks_public_subnet.id]
   node_role_arn   = aws_iam_role.node_group.arn
@@ -68,7 +68,6 @@ resource "aws_eks_node_group" "public" {
     aws_security_group_rule.cluster_to_nodes,
     aws_security_group_rule.cluster_to_nodes,
   ]
-  
   tags = { 
     Name = "public-node-group" 
   }
@@ -76,7 +75,7 @@ resource "aws_eks_node_group" "public" {
 
 # private node group
 resource "aws_eks_node_group" "private" {
-  cluster_name    = "eks-cluster"
+  cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "private-node-group"
   subnet_ids      = [aws_subnet.eks_private_subnet.id]
   node_role_arn   = aws_iam_role.node_group.arn
