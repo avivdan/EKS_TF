@@ -5,7 +5,7 @@ key_name = "ubuntu-aviv"
 ami_id = "ami-0b8e4d801c75b0f0d"
 
 # Type of the EC2 instance to deploy
-type        = "t3.micro"
+instance_type = "t3.micro"
 
 # CIDR block for the VPC
 vpc_cidr = "10.0.0.0/16"
