@@ -1,0 +1,7 @@
+.github
+# .gitignore
+minikube-linux-amd64
+outputs.txt
+*.pem
+.terraform
+.terraform.lock.hcl
